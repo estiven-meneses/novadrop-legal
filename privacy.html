@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy · NovaDrop</title>
+<meta name="description" content="How the NovaDrop Chrome extension collects, uses, stores and shares user data.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="brand" href="./"><span class="dot"></span>NovaDrop</a>
+    <nav><a href="privacy" aria-current="page">Privacy</a><a href="terms">Terms</a></nav>
+  </div>
+</header>
+<main>
+  <h1>Privacy Policy</h1>
+  <p class="meta">Effective date: September 28, 2026 · Applies to the NovaDrop Chrome extension</p>
+  <div class="lang"><a href="#en">English</a><a href="#es">Español</a></div>
+
+  <section id="en">
+  <p>This Privacy Policy explains what data the NovaDrop Chrome extension ("NovaDrop", "the extension", "we") collects, how it is used, where it is stored, who it is shared with, and the choices you have. NovaDrop is operated by <strong>Camilo Vargas</strong> (contact: <a href="mailto:cami38lo52@gmail.com">cami38lo52@gmail.com</a>).</p>
+
+  <div class="note"><strong>Summary.</strong> NovaDrop is a bookmark manager. To sync your bookmarks across devices you create an account, and the bookmarks you choose to save are stored in our cloud database (Supabase). We only read a web page's address, title and icon when <em>you</em> ask to save it. We do not sell your data, show ads, or track your browsing. Optional AI features send bookmark details to DeepSeek only when you enable them with your own API key.</div>
+
+  <h2>1. Data we collect</h2>
+  <table>
+    <tr><th>Category</th><th>What exactly</th><th>When</th></tr>
+    <tr><td>Account &amp; identification</td><td>Email address; password (processed and stored only in hashed form by our authentication provider); if you choose "Continue with Google": your Google account name, email address and profile picture URL.</td><td>When you sign up or sign in.</td></tr>
+    <tr><td>Profile</td><td>Username, optional profile photo you upload, and your chosen avatar color.</td><td>When you edit your account in Settings.</td></tr>
+    <tr><td>Saved pages (web history you choose to save)</td><td>URL, page title and page icon of pages you save, plus the description, notes, tags, collection, favorite/pinned/trash status and dates you add.</td><td>Only when you save a page (extension popup, right-click menu or keyboard shortcut) or import a file.</td></tr>
+    <tr><td>Collections</td><td>Names and structure of the folders you create.</td><td>When you create or edit collections.</td></tr>
+    <tr><td>AI assistant conversations</td><td>Messages you write to the built-in AI assistant and its replies.</td><td>Only if you use the AI assistant.</td></tr>
+    <tr><td>Preferences</td><td>Interface settings such as theme, view mode, sort order and panel sizes.</td><td>When you change a setting.</td></tr>
+    <tr><td>DeepSeek API key</td><td>The API key you optionally paste to enable AI features.</td><td>Stored <strong>only on your device</strong>; never sent to our servers.</td></tr>
+  </table>
+
+  <h3>Data we do not collect</h3>
+  <p>We do not collect the content of the web pages you visit, your full browsing history, keystrokes, mouse activity, location, IP-based tracking, health or financial information, or any analytics or advertising identifiers. The "saved page" indicator on the toolbar icon compares the address of the open tab with your saved list <strong>locally on your device</strong>; that address is not sent anywhere.</p>
+
+  <h2>2. How we use the data</h2>
+  <ul>
+    <li>To create and secure your account and let you sign in.</li>
+    <li>To store, sync and display your bookmarks, collections, tags and notes across your devices.</li>
+    <li>To provide optional features you turn on (AI organization, AI assistant, saved-page indicator).</li>
+    <li>To respond to support and data-deletion requests.</li>
+  </ul>
+  <p>We do not use your data for advertising, profiling, creditworthiness or lending purposes, and we do not use it for any purpose unrelated to NovaDrop's bookmark-management functionality.</p>
+
+  <h2>3. How data is handled and stored</h2>
+  <ul>
+    <li><strong>On your device:</strong> a local copy of your bookmarks and collections (browser IndexedDB), your preferences, the list of saved addresses for the toolbar indicator (<code>chrome.storage.local</code>) and your optional DeepSeek API key.</li>
+    <li><strong>In the cloud:</strong> your account, profile, bookmarks, collections, preferences and AI conversations are stored in a PostgreSQL database hosted by Supabase in the United States (AWS region us-east-1).</li>
+    <li><strong>Security:</strong> all traffic uses HTTPS/TLS. Row-level security rules ensure each account can only read and write its own records. Passwords are never stored in plain text.</li>
+  </ul>
+
+  <h2>4. Who we share data with</h2>
+  <p>We do not sell, rent or trade user data. Data is shared only with the service providers needed to run NovaDrop, and only for that purpose:</p>
+  <table>
+    <tr><th>Party</th><th>Why</th><th>Data involved</th></tr>
+    <tr><td><strong>Supabase, Inc.</strong> (<a href="https://supabase.com/privacy">privacy policy</a>)</td><td>Authentication and cloud database hosting (data processor).</td><td>All account and cloud data listed in section 1.</td></tr>
+    <tr><td><strong>Google LLC</strong> (<a href="https://policies.google.com/privacy">privacy policy</a>)</td><td>Only if you choose "Continue with Google" to sign in.</td><td>Google returns your name, email and profile picture URL to our authentication provider.</td></tr>
+    <tr><td><strong>DeepSeek</strong> (<a href="https://www.deepseek.com/">deepseek.com</a>)</td><td>Only if you enable AI features by entering your own DeepSeek API key, and only when you run an AI action or chat.</td><td>Titles, URLs, descriptions and collection names of the bookmarks involved in the request, and your AI chat messages. Requests are sent directly from your browser to DeepSeek using your key.</td></tr>
+  </table>
+  <p>We may also disclose data if required by law or to protect the rights and safety of users.</p>
+
+  <h2>5. Chrome Web Store Limited Use</h2>
+  <p>The use of information received through Chrome extension APIs adheres to the <a href="https://developer.chrome.com/docs/webstore/program-policies/user-data-faq">Chrome Web Store User Data Policy</a>, including the Limited Use requirements.</p>
+
+  <h2>6. Retention and deletion</h2>
+  <ul>
+    <li>Cloud data is kept while your account exists.</li>
+    <li>You can delete individual bookmarks and collections at any time, or erase all of them with <em>Settings → Backups → Reset data</em>. Items moved to the trash are deleted when you empty it.</li>
+    <li>You can export your data at any time (<em>Settings → Backups</em>, CSV or JSON).</li>
+    <li>To delete your account and all associated cloud data, email <a href="mailto:cami38lo52@gmail.com">cami38lo52@gmail.com</a> from your account's address. We complete deletions within 30 days.</li>
+    <li>Uninstalling the extension removes the data stored on your device.</li>
+  </ul>
+
+  <h2>7. Your rights</h2>
+  <p>You may request access to, correction of, export of or deletion of your personal data by contacting us. We respond within 30 days.</p>
+
+  <h2>8. Children</h2>
+  <p>NovaDrop is not directed to children under 13, and we do not knowingly collect their data. If you believe a child has created an account, contact us and we will delete it.</p>
+
+  <h2>9. Changes</h2>
+  <p>If we change this policy we will update the effective date above, and for material changes we will notify users in the extension before the change applies.</p>
+
+  <h2>10. Contact</h2>
+  <p>Camilo Vargas · <a href="mailto:cami38lo52@gmail.com">cami38lo52@gmail.com</a></p>
+  </section>
+
+  <hr>
+
+  <section id="es" lang="es">
+  <h1>Política de Privacidad</h1>
+  <p class="meta">Fecha de vigencia: 28 de septiembre de 2026 · Aplica a la extensión de Chrome NovaDrop</p>
+  <p>Esta política explica qué datos recopila la extensión NovaDrop ("NovaDrop", "nosotros"), cómo se usan, dónde se almacenan, con quién se comparten y qué opciones tienes. NovaDrop es operada por <strong>Camilo Vargas</strong> (contacto: <a href="mailto:cami38lo52@gmail.com">cami38lo52@gmail.com</a>).</p>
+
+  <div class="note"><strong>Resumen.</strong> NovaDrop es un gestor de marcadores. Para sincronizarlos entre dispositivos creas una cuenta, y las páginas que decides guardar se almacenan en nuestra base de datos en la nube (Supabase). Solo leemos la dirección, el título y el icono de una página cuando <em>tú</em> pides guardarla. No vendemos tus datos, no mostramos anuncios ni rastreamos tu navegación. Las funciones de IA opcionales envían datos de marcadores a DeepSeek solo si las activas con tu propia clave de API.</div>
+
+  <h2>1. Datos que recopilamos</h2>
+  <table>
+    <tr><th>Categoría</th><th>Qué exactamente</th><th>Cuándo</th></tr>
+    <tr><td>Cuenta e identificación</td><td>Correo electrónico; contraseña (procesada y guardada solo cifrada con hash por nuestro proveedor de autenticación); si eliges "Continuar con Google": nombre, correo y URL de la foto de tu cuenta de Google.</td><td>Al registrarte o iniciar sesión.</td></tr>
+    <tr><td>Perfil</td><td>Nombre de usuario, foto de perfil opcional que subas y el color de avatar elegido.</td><td>Al editar tu cuenta en Ajustes.</td></tr>
+    <tr><td>Páginas guardadas (historial que tú decides guardar)</td><td>URL, título e icono de las páginas que guardas, y la descripción, notas, etiquetas, colección, estado de favorito/anclado/papelera y fechas que añadas.</td><td>Solo cuando guardas una página (ventana de la extensión, menú contextual o atajo de teclado) o importas un archivo.</td></tr>
+    <tr><td>Colecciones</td><td>Nombres y estructura de las carpetas que creas.</td><td>Al crear o editar colecciones.</td></tr>
+    <tr><td>Conversaciones con el asistente de IA</td><td>Mensajes que escribes al asistente y sus respuestas.</td><td>Solo si usas el asistente.</td></tr>
+    <tr><td>Preferencias</td><td>Ajustes de interfaz como tema, vista, orden y tamaño de paneles.</td><td>Al cambiar un ajuste.</td></tr>
+    <tr><td>Clave de API de DeepSeek</td><td>La clave que pegas opcionalmente para activar la IA.</td><td>Se guarda <strong>solo en tu dispositivo</strong>; nunca se envía a nuestros servidores.</td></tr>
+  </table>
+  <h3>Datos que no recopilamos</h3>
+  <p>No recopilamos el contenido de las páginas que visitas, tu historial completo, pulsaciones de teclas, actividad del ratón, ubicación, datos de salud o financieros, ni identificadores de analítica o publicidad. El indicador de "página guardada" del icono compara la dirección de la pestaña abierta con tu lista <strong>localmente en tu dispositivo</strong>; esa dirección no se envía a ningún sitio.</p>
+
+  <h2>2. Cómo usamos los datos</h2>
+  <ul>
+    <li>Crear y proteger tu cuenta y permitirte iniciar sesión.</li>
+    <li>Guardar, sincronizar y mostrar tus marcadores, colecciones, etiquetas y notas en tus dispositivos.</li>
+    <li>Ofrecer las funciones opcionales que actives (organización con IA, asistente de IA, indicador de página guardada).</li>
+    <li>Atender solicitudes de soporte y de borrado de datos.</li>
+  </ul>
+  <p>No usamos tus datos para publicidad, perfiles, evaluación crediticia ni para ningún fin ajeno a la gestión de marcadores de NovaDrop.</p>
+
+  <h2>3. Cómo se tratan y almacenan</h2>
+  <ul>
+    <li><strong>En tu dispositivo:</strong> una copia local de tus marcadores y colecciones (IndexedDB), tus preferencias, la lista de direcciones guardadas para el indicador (<code>chrome.storage.local</code>) y tu clave opcional de DeepSeek.</li>
+    <li><strong>En la nube:</strong> cuenta, perfil, marcadores, colecciones, preferencias y conversaciones de IA se guardan en una base de datos PostgreSQL alojada por Supabase en Estados Unidos (región AWS us-east-1).</li>
+    <li><strong>Seguridad:</strong> todo el tráfico usa HTTPS/TLS. Reglas de seguridad a nivel de fila garantizan que cada cuenta solo pueda leer y escribir sus propios registros. Las contraseñas nunca se guardan en texto plano.</li>
+  </ul>
+
+  <h2>4. Con quién compartimos datos</h2>
+  <p>No vendemos, alquilamos ni intercambiamos datos de usuarios. Solo se comparten con los proveedores necesarios para que NovaDrop funcione:</p>
+  <table>
+    <tr><th>Tercero</th><th>Para qué</th><th>Datos</th></tr>
+    <tr><td><strong>Supabase, Inc.</strong></td><td>Autenticación y alojamiento de la base de datos (encargado del tratamiento).</td><td>Todos los datos de cuenta y nube de la sección 1.</td></tr>
+    <tr><td><strong>Google LLC</strong></td><td>Solo si eliges "Continuar con Google".</td><td>Google devuelve tu nombre, correo y foto a nuestro proveedor de autenticación.</td></tr>
+    <tr><td><strong>DeepSeek</strong></td><td>Solo si activas la IA con tu propia clave y solo al ejecutar una acción de IA o chatear.</td><td>Títulos, URLs, descripciones y nombres de colecciones de los marcadores implicados, y tus mensajes al asistente. Se envían directamente desde tu navegador a DeepSeek con tu clave.</td></tr>
+  </table>
+
+  <h2>5. Uso limitado (Chrome Web Store)</h2>
+  <p>El uso de la información recibida a través de las API de extensiones de Chrome cumple la <a href="https://developer.chrome.com/docs/webstore/program-policies/user-data-faq">Política de datos de usuario de Chrome Web Store</a>, incluidos los requisitos de Uso Limitado.</p>
+
+  <h2>6. Conservación y borrado</h2>
+  <ul>
+    <li>Los datos en la nube se conservan mientras exista tu cuenta.</li>
+    <li>Puedes borrar marcadores y colecciones cuando quieras, o todos con <em>Ajustes → Copias de seguridad → Limpiar todo</em>.</li>
+    <li>Puedes exportar tus datos en cualquier momento (CSV o JSON).</li>
+    <li>Para eliminar tu cuenta y todos sus datos en la nube, escribe a <a href="mailto:cami38lo52@gmail.com">cami38lo52@gmail.com</a> desde el correo de tu cuenta. Lo completamos en un máximo de 30 días.</li>
+    <li>Desinstalar la extensión elimina los datos guardados en tu dispositivo.</li>
+  </ul>
+
+  <h2>7. Tus derechos</h2>
+  <p>Puedes solicitar acceso, corrección, exportación o eliminación de tus datos personales escribiéndonos. Respondemos en un máximo de 30 días.</p>
+
+  <h2>8. Menores</h2>
+  <p>NovaDrop no está dirigida a menores de 13 años y no recopilamos sus datos a sabiendas.</p>
+
+  <h2>9. Cambios</h2>
+  <p>Si cambiamos esta política actualizaremos la fecha de vigencia y, si el cambio es importante, lo avisaremos dentro de la extensión antes de que aplique.</p>
+
+  <h2>10. Contacto</h2>
+  <p>Camilo Vargas · <a href="mailto:cami38lo52@gmail.com">cami38lo52@gmail.com</a></p>
+  </section>
+</main>
+<footer>© 2026 NovaDrop · <a href="terms">Terms of Service</a></footer>
+</body>
+</html>
