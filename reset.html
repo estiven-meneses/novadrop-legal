@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Nueva contraseña · NovaDrop</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+<main class="card">
+  <div class="logo"><img src="logo.svg" alt="">NovaDrop</div>
+
+  <!-- Comprobando el enlace -->
+  <section id="loading">
+    <p class="lead">Comprobando el enlace…</p>
+  </section>
+
+  <!-- Enlace válido: elegir contraseña -->
+  <section id="set" hidden>
+    <div class="icon icon--key">🔑</div>
+    <h1>Crea una contraseña nueva</h1>
+    <p class="lead" id="set-email">Elige una contraseña que no uses en otros sitios.</p>
+    <form id="set-form" novalidate>
+      <div class="field">
+        <label for="pw">Nueva contraseña</label>
+        <input id="pw" type="password" autocomplete="new-password" minlength="8" required autofocus>
+        <button type="button" class="toggle" data-for="pw" aria-label="Mostrar contraseña">Ver</button>
+      </div>
+      <div class="field">
+        <label for="pw2">Repítela</label>
+        <input id="pw2" type="password" autocomplete="new-password" minlength="8" required>
+      </div>
+      <p class="hint">Mínimo 8 caracteres.</p>
+      <div class="error" id="set-error" role="alert"></div>
+      <button class="btn" id="set-btn">Guardar contraseña</button>
+    </form>
+  </section>
+
+  <!-- Listo -->
+  <section id="done" hidden>
+    <div class="icon icon--ok">✓</div>
+    <h1>Contraseña actualizada</h1>
+    <p class="lead">Ya puedes volver a Chrome, abrir NovaDrop (<b>⌘/Ctrl + E</b>) e iniciar sesión con tu nueva contraseña.</p>
+  </section>
+
+  <!-- Enlace caducado o sin enlace: pedir uno nuevo -->
+  <section id="request" hidden>
+    <div class="icon icon--warn" id="request-icon">!</div>
+    <h1 id="request-title">El enlace caducó</h1>
+    <p class="lead" id="request-text">Los enlaces son de un solo uso y duran poco. Pide uno nuevo:</p>
+    <form id="request-form" novalidate>
+      <div class="field">
+        <label for="email">Correo de tu cuenta</label>
+        <input id="email" type="email" autocomplete="email" inputmode="email" required>
+      </div>
+      <div class="error" id="request-error" role="alert"></div>
+      <button class="btn" id="request-btn">Enviar enlace nuevo</button>
+    </form>
+  </section>
+
+  <section id="sent" hidden>
+    <div class="icon icon--ok">✉</div>
+    <h1>Revisa tu correo</h1>
+    <p class="lead">Si <b id="sent-email"></b> tiene una cuenta en NovaDrop, te llegará un enlace en unos minutos. Mira también en spam.</p>
+  </section>
+
+  <div class="foot"><a href="privacy">Privacidad</a><a href="terms">Términos</a></div>
+</main>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  const SUPABASE_URL = 'https://srxxffcuzlururvhwklg.supabase.co';
+  // Clave pública (anon): la misma que usa la extensión; los datos los protege RLS.
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyeHhmZmN1emx1cnVydmh3a2xnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5NjcwNTgsImV4cCI6MjA5ODU0MzA1OH0.7vDv_z3QiebTBUQqduN0-JC5f5qH9CNhaUoICuJxUYM';
+  const REDIRECT = location.origin + location.pathname;
+
+  const $ = (id) => document.getElementById(id);
+  const show = (id) => {
+    for (const s of ['loading', 'set', 'done', 'request', 'sent']) $(s).hidden = s !== id;
+    const focus = $(id).querySelector('input');
+    if (focus) focus.focus();
+  };
+
+  // Se lee el error antes de crear el cliente, que limpia el fragmento.
+  const hash = new URLSearchParams(location.hash.slice(1));
+  const query = new URLSearchParams(location.search);
+  const linkError = hash.get('error_code') || hash.get('error') || query.get('error_code') || query.get('error');
+  const hadToken = hash.has('access_token') || query.has('code') || query.has('token_hash');
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession: false, detectSessionInUrl: true, flowType: 'implicit' }
+  });
+
+  const openRequest = (expired) => {
+    if (!expired) {
+      $('request-icon').className = 'icon icon--key';
+      $('request-icon').textContent = '🔑';
+      $('request-title').textContent = '¿Olvidaste tu contraseña?';
+      $('request-text').textContent = 'Escribe tu correo y te enviaremos un enlace para crear una nueva.';
+    }
+    show('request');
+  };
+
+  async function init() {
+    if (linkError) {
+      history.replaceState(null, '', location.pathname);
+      openRequest(true);
+      return;
+    }
+    // token_hash: plantilla de correo que verifica aquí mismo (sin pasar por /verify).
+    const tokenHash = query.get('token_hash');
+    if (tokenHash) {
+      const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' });
+      history.replaceState(null, '', location.pathname);
+      if (error) { openRequest(true); return; }
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    if (hadToken) history.replaceState(null, '', location.pathname);
+    if (session) {
+      $('set-email').textContent = `Para ${session.user.email}. Elige una que no uses en otros sitios.`;
+      show('set');
+    } else {
+      openRequest(hadToken);
+    }
+  }
+
+  document.querySelectorAll('.toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const input = $(btn.dataset.for);
+      const visible = input.type === 'text';
+      input.type = visible ? 'password' : 'text';
+      $('pw2').type = input.type;
+      btn.textContent = visible ? 'Ver' : 'Ocultar';
+    });
+  });
+
+  $('set-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pw = $('pw').value;
+    const err = $('set-error');
+    err.textContent = '';
+    if (pw.length < 8) { err.textContent = 'La contraseña debe tener al menos 8 caracteres.'; return; }
+    if (pw !== $('pw2').value) { err.textContent = 'Las contraseñas no coinciden.'; return; }
+
+    $('set-btn').disabled = true;
+    $('set-btn').textContent = 'Guardando…';
+    const { error } = await supabase.auth.updateUser({ password: pw });
+    $('set-btn').disabled = false;
+    $('set-btn').textContent = 'Guardar contraseña';
+
+    if (error) {
+      if (/different from the old/i.test(error.message)) err.textContent = 'La nueva contraseña debe ser distinta de la anterior.';
+      else if (/weak|pwned|leaked/i.test(error.message)) err.textContent = 'Esa contraseña es demasiado débil o aparece en filtraciones conocidas. Elige otra.';
+      else if (/session|jwt|expired/i.test(error.message)) { openRequest(true); return; }
+      else err.textContent = error.message;
+      return;
+    }
+    // La sesión de esta página no se necesita: se entra desde la extensión.
+    await supabase.auth.signOut();
+    show('done');
+  });
+
+  $('request-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = $('email').value.trim();
+    const err = $('request-error');
+    err.textContent = '';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Escribe un correo válido.'; return; }
+
+    $('request-btn').disabled = true;
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: REDIRECT });
+    $('request-btn').disabled = false;
+
+    if (error && /rate|too many|seconds/i.test(error.message)) {
+      err.textContent = 'Has pedido demasiados enlaces seguidos. Espera un minuto y vuelve a intentarlo.';
+      return;
+    }
+    // Por seguridad no se revela si el correo tiene cuenta.
+    $('sent-email').textContent = email;
+    show('sent');
+  });
+
+  init();
+</script>
+</body>
+</html>

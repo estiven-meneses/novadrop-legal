@@ -2,26 +2,74 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
 <title>Cuenta confirmada · NovaDrop</title>
-<link rel="stylesheet" href="style.css">
-<style>
-  .done { text-align:center; padding-top:48px; }
-  .check { width:64px; height:64px; border-radius:50%; background:var(--accent); color:#fff; font-size:34px; line-height:64px; margin:0 auto 20px; }
-</style>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="auth.css">
 </head>
 <body>
-<header>
-  <div class="bar">
-    <a class="brand" href="./"><span class="dot"></span>NovaDrop</a>
-    <nav><a href="privacy">Privacy</a><a href="terms">Terms</a></nav>
-  </div>
-</header>
-<main class="done">
-  <div class="check">✓</div>
-  <h1>¡Tu cuenta está confirmada!</h1>
-  <p>Ya puedes cerrar esta pestaña, pulsar el icono de <strong>NovaDrop</strong> en la barra de Chrome e iniciar sesión.</p>
-  <p class="meta" style="margin-top:32px">Your account is confirmed. You can close this tab, click the NovaDrop icon in the Chrome toolbar and sign in.</p>
+<main class="card">
+  <div class="logo"><img src="logo.svg" alt="">NovaDrop</div>
+
+  <section id="checking" hidden><p class="lead">Confirmando tu correo…</p></section>
+
+  <section id="ok">
+    <div class="icon icon--ok">✓</div>
+    <h1>¡Tu cuenta está lista!</h1>
+    <p class="lead">Tu correo quedó confirmado. Para empezar:</p>
+    <ol class="steps">
+      <li>Vuelve a Chrome y pulsa el icono de NovaDrop (o <b>⌘/Ctrl + E</b>).</li>
+      <li>Inicia sesión con tu correo y contraseña.</li>
+    </ol>
+    <p class="hint" style="text-align:center">Ya puedes cerrar esta pestaña.</p>
+  </section>
+
+  <section id="expired" hidden>
+    <div class="icon icon--warn">!</div>
+    <h1>El enlace ya no es válido</h1>
+    <p class="lead" id="expired-text">Caducó o ya se usó. Abre NovaDrop e intenta iniciar sesión: si tu correo aún no está confirmado, te ofreceremos enviarte un enlace nuevo.</p>
+  </section>
+
+  <div class="foot"><a href="privacy">Privacidad</a><a href="terms">Términos</a></div>
 </main>
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  const SUPABASE_URL = 'https://srxxffcuzlururvhwklg.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyeHhmZmN1emx1cnVydmh3a2xnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5NjcwNTgsImV4cCI6MjA5ODU0MzA1OH0.7vDv_z3QiebTBUQqduN0-JC5f5qH9CNhaUoICuJxUYM';
+
+  const hash = new URLSearchParams(location.hash.slice(1));
+  const query = new URLSearchParams(location.search);
+  // Se borra de la barra de direcciones para no dejar tokens a la vista.
+  if (location.hash || location.search) history.replaceState(null, '', location.pathname);
+
+  const showExpired = () => {
+    document.getElementById('ok').hidden = true;
+    document.getElementById('expired').hidden = false;
+    document.title = 'Enlace no válido · NovaDrop';
+  };
+
+  if (hash.get('error') || hash.get('error_code') || query.get('error')) {
+    showExpired();
+  } else if (query.get('token_hash')) {
+    // Enlace de las plantillas de NovaDrop: se verifica aquí, al abrir la página.
+    const type = query.get('type') === 'email_change' ? 'email_change' : 'email';
+    document.getElementById('ok').hidden = true;
+    document.getElementById('checking').hidden = false;
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: false } });
+    const { error } = await supabase.auth.verifyOtp({ token_hash: query.get('token_hash'), type });
+    document.getElementById('checking').hidden = true;
+    if (error) showExpired();
+    else {
+      if (type === 'email_change') {
+        document.querySelector('#ok h1').textContent = 'Correo actualizado';
+        document.querySelector('#ok .lead').textContent = 'Tu nuevo correo ya está activo. Desde ahora inicia sesión con él.';
+      }
+      document.getElementById('ok').hidden = false;
+      await supabase.auth.signOut();
+    }
+  }
+</script>
 </body>
 </html>
